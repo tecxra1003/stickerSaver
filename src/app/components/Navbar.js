@@ -1,6 +1,6 @@
 "use client"
 import { signOut, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Avatar, Button } from "antd";
 
@@ -14,33 +14,11 @@ export default function navbar() {
     const [user, setUser] = useState({
         name: "",
         email: "",
-        password: ""
+        password: "",
+        url: ""
     })
     const [loading, setLoading] = useState(false)
-    async function getSingleUserData() {
 
-
-        const url = `/api/singleUser/?id=${session?.user?.id}`
-        const res = await fetch(url, { cache: "no-cache" });
-        if (res.ok) {
-
-            setUser(await res.json());
-
-
-        }
-    }
-    useEffect(() => {
-        let name = (session?.user?.name)
-
-
-        if (session) {
-            getSingleUserData()
-
-            name = name.split(" ").filter((res) => res.length > 0)
-            setNamesInitial(`${name[0][0]}${name[1][0]}`)
-        }
-
-    }, [session])
 
 
     const signout = () => {
@@ -63,12 +41,12 @@ export default function navbar() {
         <nav className="flex bg-blue-500 text-cyan-50 justify-between fixed left-0 right-0 top-0  z-50">
             <Link href={"/dashboard"}>
 
-                <p className="flex text-5xl p-3 ">Todo</p>
+                <p className="flex text-5xl p-3 ">Sticker Saver</p>
             </Link>
             <div className="flex "> </div>
             <div className="flex ">
 
-                {user &&
+                {user && session &&
                     <div className="flex justify-center text-center mr-2">
 
                         <div className="relative z-50">
