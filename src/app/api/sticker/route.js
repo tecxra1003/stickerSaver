@@ -10,7 +10,6 @@ export async function POST(req) {
             return NextResponse.json("please provide a authentication token")
 
         }
-        console.log({ authToken })
         let user = jwt.verify(authToken, jwtSecret)
         let createSticker = await Sticker.create({ name: reqData.name, image: reqData.image, isCustom: user.user.type == "Admin" ? false : true, createdBy: user.user._id, stickerFamilyId: reqData.stickerFamilyId })
         return NextResponse.json(createSticker)

@@ -9,7 +9,6 @@ export async function POST(req) {
 
         let data = await req.json()
         let user = await User.findOne({ email: data.email })
-        console.log(user)
         if (!user) {
             return NextResponse.json("give right credentials")
         }

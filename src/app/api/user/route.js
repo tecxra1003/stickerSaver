@@ -32,7 +32,6 @@ export async function GET(req) {
             return NextResponse.json("please provide a authentication token")
 
         }
-        console.log({ authToken })
         let user = jwt.verify(authToken, jwtSecret)
 
         return NextResponse.json(user)
@@ -56,7 +55,6 @@ export async function PUT(req) {
 
 
         let user = jwt.verify(authToken, jwtSecret)
-        console.log(user)
         let newUser = {}
         if (reqData.password) {
 
@@ -77,7 +75,6 @@ export async function PUT(req) {
         if (reqData.type) { newUser.type = reqData.type }
         if (reqData.url) { newUser.url = reqData.url }
 
-        console.log(user.user._id)
         let updatedUser = await User.findByIdAndUpdate(user.user._id, { $set: newUser })
         return NextResponse.json(updatedUser)
 
@@ -99,7 +96,6 @@ export async function DELETE(req) {
 
 
         let user = jwt.verify(authToken, jwtSecret)
-        console.log(user)
         let deleteUser = await User.findByIdAndUpdate(user.user._id, { $set: { isDeleted: true } })
         return NextResponse.json(deleteUser)
 

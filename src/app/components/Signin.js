@@ -40,7 +40,6 @@ export default function signin() {
         password,
         redirect: false,
       })
-      console.log({ res })
       if (res.error) {
 
         setError("invalid credentials")
