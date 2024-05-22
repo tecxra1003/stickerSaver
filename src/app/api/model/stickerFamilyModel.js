@@ -10,7 +10,7 @@ const stickerFamilySchema = new Schema({
         required: true,
     },
     isCustom: {
-        type: String,
+        type: Boolean,
         required: true,
     },
     createdBy: {

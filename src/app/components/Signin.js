@@ -92,7 +92,7 @@ export default function signin() {
             }
 
             <div>
-              <Button type="primary" onClick={handleSubmit} loading={signInLoader}>
+              <Button type="primary" htmlType="submit" onClick={handleSubmit} loading={signInLoader}>
                 Sign in
               </Button>
             </div>

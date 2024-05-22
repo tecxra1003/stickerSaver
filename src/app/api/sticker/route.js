@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import Sticker from "../model/stickerModel";
 import jwt from "jsonwebtoken"
-const jwtSecret = "ammadisagoodb$oy"
 export async function POST(req) {
     try {
         let reqData = await req.json()
@@ -10,7 +9,7 @@ export async function POST(req) {
             return NextResponse.json("please provide a authentication token")
 
         }
-        let user = jwt.verify(authToken, jwtSecret)
+        let user = jwt.verify(authToken, process.env.jwtSecret)
         let createSticker = await Sticker.create({ name: reqData.name, image: reqData.image, isCustom: user.user.type == "Admin" ? false : true, createdBy: user.user._id, stickerFamilyId: reqData.stickerFamilyId })
         return NextResponse.json(createSticker)
     }
@@ -30,7 +29,7 @@ export async function GET(req) {
             return NextResponse.json("please provide a authentication token")
 
         }
-        let user = jwt.verify(authToken, jwtSecret)
+        let user = jwt.verify(authToken, process.env.jwtSecret)
         let getSticker = await Sticker.find({ stickerFamilyId: stickerFamilyId, isDeleted: false })
         return NextResponse.json(getSticker)
     }
@@ -47,7 +46,7 @@ export async function PUT(req) {
             return NextResponse.json("please provide a authentication token")
 
         }
-        let user = jwt.verify(authToken, jwtSecret)
+        let user = jwt.verify(authToken, process.env.jwtSecret)
         let newSticker = {}
         if (reqData.name) { newSticker.name = reqData.name }
         if (reqData.image) { newSticker.image = reqData.image }
@@ -69,7 +68,7 @@ export async function DELETE(req) {
             return NextResponse.json("please provide a authentication token")
 
         }
-        let user = jwt.verify(authToken, jwtSecret)
+        let user = jwt.verify(authToken, process.env.jwtSecret)
 
         let updatedSticker = await Sticker.findByIdAndUpdate(id, { $set: { isDeleted: true } })
         return NextResponse.json(updatedSticker)

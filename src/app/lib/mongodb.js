@@ -1,11 +1,11 @@
 
 import mongoose from 'mongoose'
 
-const MONGODB_URI = process.env.mongodbUrl
+const mongodbUrl = process.env.mongodbUrl
 
-if (!MONGODB_URI) {
+if (!mongodbUrl) {
   throw new Error(
-    'Please define the MONGODB_URI environment variable inside .env.local',
+    'Please define the mongodbUrl environment variable inside .env',
   )
 }
 
@@ -23,7 +23,7 @@ async function dbConnect() {
     const opts = {
       bufferCommands: false,
     }
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then(mongoose => {
+    cached.promise = mongoose.connect(mongodbUrl, opts).then(mongoose => {
       console.log('Db connected')
       return mongoose
     })

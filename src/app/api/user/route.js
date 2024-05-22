@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import User from "../model/userModel";
 import bcrypt, { hash } from "bcrypt"
 import jwt from "jsonwebtoken"
-const jwtSecret = "ammadisagoodb$oy"
 export async function POST(req) {
 
     try {
@@ -32,7 +31,7 @@ export async function GET(req) {
             return NextResponse.json("please provide a authentication token")
 
         }
-        let user = jwt.verify(authToken, jwtSecret)
+        let user = jwt.verify(authToken, process.env.jwtSecret)
 
         return NextResponse.json(user)
     }
@@ -54,7 +53,7 @@ export async function PUT(req) {
         }
 
 
-        let user = jwt.verify(authToken, jwtSecret)
+        let user = jwt.verify(authToken, process.env.jwtSecret)
         let newUser = {}
         if (reqData.password) {
 
@@ -95,7 +94,7 @@ export async function DELETE(req) {
         }
 
 
-        let user = jwt.verify(authToken, jwtSecret)
+        let user = jwt.verify(authToken, process.env.jwtSecret)
         let deleteUser = await User.findByIdAndUpdate(user.user._id, { $set: { isDeleted: true } })
         return NextResponse.json(deleteUser)
 

@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import StickerFamily from "../model/stickerFamilyModel";
 import jwt from "jsonwebtoken"
-const jwtSecret = "ammadisagoodb$oy"
 export async function GET(req) {
     try {
         const searchParams = req.nextUrl.searchParams
@@ -11,7 +10,7 @@ export async function GET(req) {
             return NextResponse.json("please provide a authentication token")
 
         }
-        let user = jwt.verify(authToken, jwtSecret)
+        let user = jwt.verify(authToken, process.env.jwtSecret)
         let getFamily = await StickerFamily.find({ _id: stickerFamilyId })
         return NextResponse.json(getFamily)
     }
