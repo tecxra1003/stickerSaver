@@ -1,17 +1,16 @@
-"use client"
 
-import { useSession } from "next-auth/react"
 
 
 
 export default function dashboard() {
-    const { data: session } = useSession()
 
     return (
-        <div className="bg-green-700 flex justify-center place-items-center mt-40">
-            <div>
-                coming soon
-            </div>
+        <div className="text-center absolute bottom-1/2 right-0 left-0  mt-20">
+
+            <p className="text-emerald-700 font-extrabold text-7xl ">coming soon</p>
+
+
+
         </div>
     )
 

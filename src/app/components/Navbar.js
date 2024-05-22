@@ -76,7 +76,7 @@ export default function navbar() {
 
                                 <hr />
 
-                                <Link href={"/profile"} className="block  py-2 px-1 text-sm text-gray-700">
+                                <Link href={""} className="block  py-2 px-1 text-sm text-gray-700">
                                     <Button onClick={() => setUmenu("hidden")} type="submit" className="block  py-2 text-sm text-gray-700">
                                         Profile
                                     </Button>

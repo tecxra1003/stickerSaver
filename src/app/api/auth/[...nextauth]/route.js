@@ -42,8 +42,7 @@ export const authOptions = {
 
             if (user?.id) {
                 token.id = user.id;
-                token.accessToken = (jwt.sign({ user }, process.env.jwtSecret))
-
+                token.accessToken = (jwt.sign(JSON.parse(JSON.stringify(user)), process.env.jwtSecret))
             }
 
 
