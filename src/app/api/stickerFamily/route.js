@@ -27,6 +27,7 @@ export async function GET(req) {
             return NextResponse.json("please provide a authentication token")
 
         }
+
         let user = jwt.verify(authToken, process.env.jwtSecret)
         let getFamily = await StickerFamily.find({ createdBy: user.user._id })
         return NextResponse.json(getFamily)
@@ -48,7 +49,7 @@ export async function PUT(req) {
         let newFamily = {}
         if (reqData.name) { newFamily.name = reqData.name }
         if (reqData.thumbnail) { newFamily.thumbnail = reqData.thumbnail }
-        if (reqData.iscustom) { newFamily.iscustom = reqData.iscustom }
+        if (reqData.isCustom) { newFamily.isCustom = reqData.isCustom }
         let updatedFamily = await StickerFamily.findByIdAndUpdate(id, { $set: newFamily })
         return NextResponse.json(updatedFamily)
 

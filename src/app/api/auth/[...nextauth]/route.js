@@ -11,6 +11,7 @@ export const authOptions = {
 
             credentials: {},
             async authorize(credentials, req) {
+
                 const { email, password } = credentials
 
                 const user = await User.findOne({ email });
