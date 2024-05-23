@@ -1,8 +1,10 @@
+// "use client"
 import { Inter } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "./provider";
 import dbConnect from "./lib/mongodb";
 import Navbar from "./components/Navbar";
+import SideBar from "./components/SideBar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -11,15 +13,18 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  // const { data: session } = useSession();
   dbConnect()
+
   return (
     <html lang="en">
       <body className={inter.className} >
-        <AuthProvider>
-          <Navbar />
 
+
+        <AuthProvider>
 
           {children}
+
         </AuthProvider>
 
       </body>

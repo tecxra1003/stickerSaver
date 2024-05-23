@@ -7,7 +7,7 @@ import { Avatar, Button } from "antd";
 
 
 
-export default function navbar() {
+export default function Navbar() {
     const [umenu, setUmenu] = useState("hidden");
     let { data: session } = useSession();
     const [namesInitial, setNamesInitial] = useState("AM")
@@ -38,7 +38,7 @@ export default function navbar() {
 
 
     return (
-        <nav className="flex bg-blue-500 text-cyan-50 justify-between fixed left-0 right-0 top-0  z-50">
+        <nav className="flex  bg-blue-500 text-cyan-50 justify-between w-screen left-0 right-0 top-0  z-50">
             <Link href={"/dashboard"}>
 
                 <p className="flex text-5xl p-3 ">Sticker Saver</p>
@@ -51,49 +51,19 @@ export default function navbar() {
 
                         <div className="relative z-50">
                             <div>
-                                <button type="primary" onClick={handleUmenu} className="m-3  flex  " >
 
-                                    <div className=" flex justify-center border-white">
-                                        {user?.url == "" && <Avatar size={60}>{namesInitial.toUpperCase()}</Avatar>}
+                                <div className=" flex justify-center m-3 border-white">
+                                    {user?.url == "" && <Avatar size={60}>{namesInitial.toUpperCase()}</Avatar>}
 
-                                        {user?.url && <Avatar size={60} src={user?.url} />}
-
+                                    {user?.url && <Avatar size={60} src={user?.url} />}
 
 
-                                    </div>
-                                </button>
+
+                                </div>
                             </div>
-                            <div className={`absolute ${umenu} right-0 border border-gray-300 z-10 w-28 origin-top-right rounded-md bg-white  shadow-lg ring-1 ring-black ring-opacity-5 `} >
 
-
-                                <Link href={"/dashboard"} className="block px-1 py-2 text-sm text-gray-700">
-                                    <Button onClick={() => setUmenu("hidden")} type="submit" className="block  py-2 text-sm text-gray-700">
-
-                                        Dashboard
-                                    </Button>
-
-                                </Link>
-
-                                <hr />
-
-                                <Link href={""} className="block  py-2 px-1 text-sm text-gray-700">
-                                    <Button onClick={() => setUmenu("hidden")} type="submit" className="block  py-2 text-sm text-gray-700">
-                                        Profile
-                                    </Button>
-
-                                </Link>
-
-                                <hr />
-
-                                <Link href={""} className="block  py-2 px-1 text-sm text-gray-700">
-                                    <Button onClick={() => signout()} type="submit" className="block  py-2 text-sm text-gray-700" loading={loading}>
-                                        Sign Out
-                                    </Button>
-                                </Link>
-                            </div>
                         </div>
                     </div>
-                    // </div>
                 }
 
             </div>

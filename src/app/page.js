@@ -1,9 +1,11 @@
+import Navbar from "./components/Navbar";
 import SignIn from "./components/Signin";
 export default function Home() {
   return (
-    <div className="flex items-center justify-center h-screen">
 
-      <div className=" ">
+    <div className=" ">
+      <Navbar />
+      <div className=" flex items-center justify-center ">
 
         <SignIn />
 

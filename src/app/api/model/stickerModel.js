@@ -3,7 +3,6 @@ import { Schema, model, models } from "mongoose";
 const stickerSchema = new Schema({
     name: {
         type: String,
-        required: true,
     },
     image: {
         type: String,
@@ -26,8 +25,8 @@ const stickerSchema = new Schema({
         type: Boolean,
         default: false
     },
-    deletedAt:{
-        type:Date
+    deletedAt: {
+        type: Date
     }
 },
     { timestamps: true });

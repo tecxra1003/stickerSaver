@@ -13,7 +13,9 @@ export async function GET(req) {
         }
 
         let user = jwt.verify(authToken, process.env.jwtSecret)
+
         let getFamily = await StickerFamily.find({ createdBy: user._id }).limit(limit).skip((page) * limit)
+
         return NextResponse.json(getFamily)
     }
     catch (error) {

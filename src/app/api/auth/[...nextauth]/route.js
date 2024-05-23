@@ -42,6 +42,7 @@ export const authOptions = {
 
             if (user?.id) {
                 token.id = user.id;
+                token.type = user.type
                 token.accessToken = (jwt.sign(JSON.parse(JSON.stringify(user)), process.env.jwtSecret))
             }
 
@@ -50,6 +51,7 @@ export const authOptions = {
         },
         async session({ session, token }) {
             session.user.id = token.id;
+            session.user.type = token.type
             session.accessToken = token.accessToken
 
 

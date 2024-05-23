@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { Button } from "antd";
 
 
-export default function signin() {
+export default function Signin() {
   const { data: session } = useSession();
   const [signInLoader, setSignInLoader] = useState(false);
   const [email, setEmail] = useState("");
@@ -61,13 +61,13 @@ export default function signin() {
 
   return (
 
-    <div className="flex justify-center align-middle ">
-      <div className="flex  min-h-full shadow-2xl border border-gray-300 rounded-xl mt-5 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+    <div className="flex   justify-center align-middle w-fit  ">
+      <div className="  flex flex-col shadow-2xl border border-gray-300 rounded-xl mt-5  justify-center px-6 py-12 lg:px-8">
+        <div className="sm:mx-auto  sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="mt-10 sm:mx-auto  sm:max-w-sm">
           <form className="space-y-6" action="#" method="POST">
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Email address</label>
