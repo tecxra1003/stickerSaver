@@ -64,7 +64,6 @@ export default function SideBar() {
 
         <Menu
             onClick={({ key, keyPath, domEvent }) => onclick(key)}
-            defaultSelectedKeys={['dashboard']}
 
             mode="inline"
             items={items}

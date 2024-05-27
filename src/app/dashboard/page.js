@@ -2,16 +2,20 @@
 
 "use client"
 
-import { Card } from "antd"
+import { Card, Spin } from "antd"
 import { useSession } from "next-auth/react"
 import { headers } from "../../../next.config"
 import { useEffect, useState } from "react"
 
 export default function Dashboard() {
-    const [count, setCount] = useState()
+    const [stickerFamilies, setStickerFamilies] = useState()
+    const [stickers, setStickers] = useState()
+    const [stickerOfUser, setStickerOfUser] = useState()
+    const [loader, setLoader] = useState(false)
     const { data: session } = useSession()
     async function fetchCountOfStickers() {
-        let newCount = await fetch("/api/sticker/getTotal", {
+        setLoader(true)
+        let getStickerFamilies = await fetch("/api/getDashboardStats/stickerFamilies", {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -19,8 +23,27 @@ export default function Dashboard() {
             },
 
         })
-        setCount(await newCount.json())
-        console.log(count)
+        setStickerFamilies(await getStickerFamilies.json())
+        let getStickers = await fetch("/api/getDashboardStats/stickers", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authToken': session.accessToken,
+            },
+
+        })
+        setStickers(await getStickers.json())
+        let getStickerOfUser = await fetch("/api/getDashboardStats/stickersOfUser", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authToken': session.accessToken,
+            },
+
+        })
+        setStickerOfUser(await getStickerOfUser.json())
+        setLoader(false)
+
     }
     useEffect(() => {
 
@@ -37,10 +60,12 @@ export default function Dashboard() {
 
     return (
         <div>
+            <Spin spinning={loader} size="large" fullscreen />
 
-            {count &&
+
+            {stickerOfUser &&
                 <div className="flex">
-                    {session.user.type == "Admin" &&
+                    {session && session.user.type == "Admin" &&
                         <div>
 
                             <div className="m-2">
@@ -50,10 +75,10 @@ export default function Dashboard() {
                                         Sticker Families
                                     </div>
                                     <div className="text-3xl">
-                                        {count.totalFamilies}
+                                        {stickerFamilies}
                                     </div>
                                     <div className="text-blue-300">
-                                        {count.total} Stickers
+                                        {stickers} Stickers
                                     </div>
                                 </Card>
                             </div>
@@ -64,7 +89,7 @@ export default function Dashboard() {
                                         Stickers
                                     </div>
                                     <div className="text-3xl">
-                                        {count.total}
+                                        {stickers}
                                     </div>
 
                                 </Card>
@@ -77,7 +102,7 @@ export default function Dashboard() {
                                 My Stickers
                             </div>
                             <div className="text-3xl">
-                                {count.totalOfUser}
+                                {stickerOfUser}
                             </div>
 
                         </Card>

@@ -13,8 +13,16 @@ export async function GET(req, context) {
 
         }
         let user = jwt.verify(authToken, process.env.jwtSecret)
-        let getSticker = await Sticker.find({ stickerFamilyId: id, isDeleted: false }).limit(limit).skip((page) * limit)
-        return NextResponse.json(getSticker)
+
+        if (user.type == "Admin") {
+            let getSticker = await Sticker.find({ stickerFamilyId: id, isDeleted: false }).sort({ createdAt: -1 }).limit(limit).skip((page) * limit)
+            return NextResponse.json(getSticker)
+        }
+        else {
+            let getSticker = await Sticker.find({ createdBy: user._id, stickerFamilyId: id, isDeleted: false }).sort({ createdAt: -1 }).limit(limit).skip((page) * limit)
+
+            return NextResponse.json(getSticker)
+        }
     }
     catch (error) {
         return NextResponse.json(error)

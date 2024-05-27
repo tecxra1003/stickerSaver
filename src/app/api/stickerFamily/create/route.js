@@ -20,7 +20,7 @@ export async function POST(req) {
         console.log(createFamily._id.toString())
         for (let i = 0; i < images.length; i++) {
             console.log(images[i])
-            let sticker = await Sticker.create({ image: images[i], isCustom: true, createdBy: "664f1d7f90479546ad8552d9", stickerFamilyId: "664f1d7f90479546ad8552d9" })
+            let sticker = await Sticker.create({ image: images[i], isCustom: true, createdBy: user._id, stickerFamilyId: createFamily._id })
             console.log(sticker)
         }
         return NextResponse.json(createFamily)

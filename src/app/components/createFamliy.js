@@ -1,71 +1,105 @@
-import { Upload } from "antd";
-import ImgCrop from 'antd-img-crop';
+import { Avatar, Button, Radio, Spin } from "antd";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-export default function CreateFamily() {
+export default function CreateFamily({ setIsOpen }) {
+    const { data: session } = useSession()
+    const [name, setName] = useState("")
+    const [error, setError] = useState("")
+    const [loader, setLoader] = useState(false)
+    const [thumbnail, setThumbnail] = useState("");
     const [imageUrl, setImageUrl] = useState([])
-    const [fileList, setFileList] = useState([]);
-    const props = {
-        beforeUpload(file) {
-
-            var reader = new FileReader();
-            reader.onloadend = function () {
-                setImageUrl(...imageUrl, reader.result)
-
-            }
-            reader.readAsDataURL(file);
-
+    function saveImage(e) {
+        const file = e.target.files[0];
+        var reader = new FileReader();
+        reader.onloadend = function () {
+            setImageUrl([...imageUrl, reader.result])
 
         }
+        reader.readAsDataURL(file);
+
+
     }
-    const onChange = ({ fileList: newFileList }) => {
-        setFileList(newFileList);
-        console.log(imageUrl)
-        console.log(fileList)
-    };
-    const onPreview = async (file) => {
-        let src = file.url;
-        if (!src) {
-            src = await new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file.originFileObj);
-                reader.onload = () => resolve(reader.result);
-            });
+
+    async function CreateFamily() {
+        setError("")
+        if (!name) {
+            setError("please enter name")
+            return
         }
-        const image = new Image();
-        image.src = src;
-        const imgWindow = window.open(src);
-        imgWindow?.document.write(image.outerHTML);
-    };
+        else if (imageUrl.length < 2) {
+            setError("select Atleast 2 stickers")
+            return
+        }
+        else if (!thumbnail) {
+            setError("Select a thumbnail")
+            return
+        }
+        console.log(imageUrl)
+        setLoader(true)
+        let createdFamily = await fetch('/api/stickerFamily/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'authToken': session.accessToken
+            },
+
+            body: JSON.stringify({
+                name: name,
+                thumbnail: imageUrl[thumbnail],
+                stickerImage: imageUrl,
+
+            }),
+        });
+        setIsOpen(false)
+        setLoader(false)
+    }
+    function selectThumbnail(e) {
+        console.log(e.target.value)
+        setThumbnail(e.target.value)
+    }
+
 
     return (
         <div >
-            <div className="text-center text-2xl font-semibold">
-                Create A New Sticker Family
-            </div>
-            <div>
-                <label className="block text-lg font-medium  text-gray-900">Name</label>
-                <div className="my-2">
-                    <input className="w-64 rounded-md border border-gray-400 py-1.5 text-gray-900 " placeholder=" Name of sticker family" />
-                </div>
-            </div>
-            <div>
-                <label className="block text-lg font-medium  text-gray-900">Add Sticker</label>
-                <div className="my-2">
-                    <ImgCrop rotationSlider>
-                        <Upload
-                            {...props}
+            <Spin spinning={loader} >
 
-                            listType="picture-card"
-                            fileList={fileList}
-                            onChange={onChange}
-                            onPreview={onPreview}
-                        >
-                            {fileList.length <= 5 && '+ Upload'}
-                        </Upload>
-                    </ImgCrop>
+                <div className="text-center text-2xl font-semibold">
+                    Create A New Sticker Family
                 </div>
-            </div>
+                <div>
+                    <label className="block text-lg font-medium  text-gray-900">Name</label>
+                    <div className="my-2">
+                        <input value={name} onChange={(e) => setName(e.target.value)} className="w-64 rounded-md border border-gray-400 py-1.5 text-gray-900 " placeholder=" Name of sticker family" />
+                    </div>
+                </div>
+                <div>
+                    <label className="block text-lg font-medium  text-gray-900">Add Sticker (2-5)</label>
+                    <div className="my-2">
+                        {imageUrl.length < 5 && <input onChange={saveImage} type="file" />}
+                    </div>
+
+                    <div className="flex flex-row ">
+                        <Radio.Group onChange={selectThumbnail} >
+
+                            {imageUrl &&
+                                imageUrl.map((image, index) => (
+                                    <div key={index} >
+
+                                        <Radio value={index} name="stickers" ><Avatar src={image} size={60} /></Radio>
+
+                                    </div>
+                                )
+                                )
+                            }
+                        </Radio.Group>
+                    </div>
+                    <Button onClick={CreateFamily}>Upload Family</Button>
+                </div>
+                {error &&
+                    <div className="bg-red-500 flex w-fit border rounded-md p-1 my-2"> {error}</div>
+                }
+            </Spin>
         </div >
     )
 }
