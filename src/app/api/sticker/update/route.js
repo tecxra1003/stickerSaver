@@ -14,12 +14,15 @@ export async function PUT(req) {
         if (reqData.name) { newSticker.name = reqData.name }
         if (reqData.image) { newSticker.image = reqData.image }
         if (reqData.isCustom) { newSticker.isCustom = reqData.isCustom }
+        if (reqData.stickerFamilyId) { newSticker.stickerFamilyId = reqData.stickerFamilyId }
+        console.log(reqData.stickerFamilyId)
+
         let updatedSticker = await Sticker.findByIdAndUpdate(id, { $set: newSticker })
         return NextResponse.json(updatedSticker)
 
     }
     catch (error) {
-        return NextResponse.json(error)
+        return NextResponse.json("error")
     }
 
 }

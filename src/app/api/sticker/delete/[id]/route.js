@@ -12,7 +12,6 @@ export async function DELETE(req, context) {
         let user = jwt.verify(authToken, process.env.jwtSecret)
 
         let updatedSticker = await Sticker.findByIdAndUpdate(id, { $set: { isDeleted: true, deletedAt: new Date() } })
-        console.log(context.params.id)
         return NextResponse.json(updatedSticker)
 
     }

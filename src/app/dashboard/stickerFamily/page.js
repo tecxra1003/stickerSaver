@@ -12,6 +12,7 @@ export default function Stickerfamily() {
     const [loader, setLoader] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
     const [limit, setLimit] = useState(20)
+    const [totalFamilies, setTotalFamilies] = useState(20)
     async function getStickerFamilies() {
         setLoader(true)
         let stickerFamilies = await fetch(`/api/stickerFamily/getAll?limit=${limit}&page=${page - 1}`, {
@@ -21,6 +22,15 @@ export default function Stickerfamily() {
                 'authToken': session.accessToken,
             },
         })
+        let getFamiliesCount = await fetch("/api/getDashboardStats/stickerFamilies", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authToken': session.accessToken,
+            },
+
+        })
+        setTotalFamilies(await getFamiliesCount.json())
         setFamiliesData(await stickerFamilies.json())
         setLoader(false)
     }
@@ -40,6 +50,7 @@ export default function Stickerfamily() {
         setLimit(pageSize)
         setLoader(false)
     }
+    const showTotal = (total) => `Total ${total} items`;
     return (
         <div className="flex justify-center z-50">
             <Spin spinning={loader} size="large" fullscreen />
@@ -53,7 +64,7 @@ export default function Stickerfamily() {
                 <FloatButton className="bottom-28 right-12" type="primary" onClick={() => setIsOpen(true)} tooltip={<div>Create New Sticker Family</div>} />
             </ConfigProvider>
             <Modal open={isOpen} onCancel={() => setIsOpen(false)} footer={null} maskClosable={false} mask={true} destroyOnClose  >
-                <CreateFamily setIsOpen={setIsOpen} />
+                <CreateFamily setIsOpen={setIsOpen} task={"Create"} />
             </Modal>
 
             <div className="flex mb-8 w-5/6 flex-wrap">
@@ -70,7 +81,7 @@ export default function Stickerfamily() {
 
             <div className="fixed bottom-0 left-0 right-0 z-50">
                 <div className="p-3 flex justify-center  bg-white">
-                    <Pagination defaultCurrent={page} total={500} pageSize={limit} onChange={changePagination} />
+                    <Pagination defaultCurrent={page} total={totalFamilies} pageSize={limit} showSizeChanger showTotal={showTotal} onChange={changePagination} />
                 </div>
             </div>
         </div>

@@ -17,11 +17,8 @@ export async function POST(req) {
         }
         let user = jwt.verify(authToken, process.env.jwtSecret)
         let createFamily = await StickerFamily.create({ name: reqData.name, thumbnail: reqData.thumbnail, isCustom: user.type == "Admin" ? false : true, createdBy: user._id })
-        console.log(createFamily._id.toString())
         for (let i = 0; i < images.length; i++) {
-            console.log(images[i])
             let sticker = await Sticker.create({ image: images[i], isCustom: true, createdBy: user._id, stickerFamilyId: createFamily._id })
-            console.log(sticker)
         }
         return NextResponse.json(createFamily)
     }

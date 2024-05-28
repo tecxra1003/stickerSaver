@@ -1,6 +1,8 @@
 import { Avatar, Button, Radio, Spin } from "antd";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import { DeleteOutlined } from '@ant-design/icons';
+
 
 export default function CreateFamily({ setIsOpen }) {
     const { data: session } = useSession()
@@ -31,11 +33,10 @@ export default function CreateFamily({ setIsOpen }) {
             setError("select Atleast 2 stickers")
             return
         }
-        else if (!thumbnail) {
+        else if (thumbnail == null) {
             setError("Select a thumbnail")
             return
         }
-        console.log(imageUrl)
         setLoader(true)
         let createdFamily = await fetch('/api/stickerFamily/create', {
             method: 'POST',
@@ -55,11 +56,12 @@ export default function CreateFamily({ setIsOpen }) {
         setLoader(false)
     }
     function selectThumbnail(e) {
-        console.log(e.target.value)
         setThumbnail(e.target.value)
     }
 
-
+    function filterImage(index) {
+        setImageUrl(imageUrl.filter((image, Index) => Index != index).map((image) => image))
+    }
     return (
         <div >
             <Spin spinning={loader} >
@@ -79,23 +81,23 @@ export default function CreateFamily({ setIsOpen }) {
                         {imageUrl.length < 5 && <input onChange={saveImage} type="file" />}
                     </div>
 
-                    <div className="flex flex-row ">
-                        <Radio.Group onChange={selectThumbnail} >
+                    <Radio.Group onChange={selectThumbnail} >
+                        <div className="flex  flex-wrap justify-center  ">
 
                             {imageUrl &&
                                 imageUrl.map((image, index) => (
-                                    <div key={index} >
+                                    <div key={index} className="flex p-1 m-1 border justify-around" >
 
                                         <Radio value={index} name="stickers" ><Avatar src={image} size={60} /></Radio>
-
+                                        <Button className="m-3" onClick={() => filterImage(index)}><DeleteOutlined /></Button>
                                     </div>
                                 )
                                 )
                             }
-                        </Radio.Group>
-                    </div>
-                    <Button onClick={CreateFamily}>Upload Family</Button>
+                        </div>
+                    </Radio.Group>
                 </div>
+                <Button onClick={CreateFamily}>Upload Family</Button>
                 {error &&
                     <div className="bg-red-500 flex w-fit border rounded-md p-1 my-2"> {error}</div>
                 }

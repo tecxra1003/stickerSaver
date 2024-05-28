@@ -10,29 +10,31 @@ import { useEffect, useState } from "react"
 export default function Dashboard() {
     const [stickerFamilies, setStickerFamilies] = useState()
     const [stickers, setStickers] = useState()
-    const [stickerOfUser, setStickerOfUser] = useState()
+    const [stickerOfUser, setStickerOfUser] = useState(null)
     const [loader, setLoader] = useState(false)
     const { data: session } = useSession()
     async function fetchCountOfStickers() {
         setLoader(true)
-        let getStickerFamilies = await fetch("/api/getDashboardStats/stickerFamilies", {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'authToken': session.accessToken,
-            },
+        if (session.user.type == "Admin") {
+            let getStickerFamilies = await fetch("/api/getDashboardStats/stickerFamilies", {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authToken': session.accessToken,
+                },
 
-        })
-        setStickerFamilies(await getStickerFamilies.json())
-        let getStickers = await fetch("/api/getDashboardStats/stickers", {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'authToken': session.accessToken,
-            },
+            })
+            setStickerFamilies(await getStickerFamilies.json())
+            let getStickers = await fetch("/api/getDashboardStats/stickers", {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authToken': session.accessToken,
+                },
 
-        })
-        setStickers(await getStickers.json())
+            })
+            setStickers(await getStickers.json())
+        }
         let getStickerOfUser = await fetch("/api/getDashboardStats/stickersOfUser", {
             method: 'GET',
             headers: {
@@ -47,7 +49,7 @@ export default function Dashboard() {
     }
     useEffect(() => {
 
-        if (session) {
+        if (session && stickerOfUser == null) {
 
             fetchCountOfStickers()
         }
@@ -63,7 +65,7 @@ export default function Dashboard() {
             <Spin spinning={loader} size="large" fullscreen />
 
 
-            {stickerOfUser &&
+            {stickerOfUser != null &&
                 <div className="flex">
                     {session && session.user.type == "Admin" &&
                         <div>

@@ -10,8 +10,14 @@ export async function GET(req) {
         }
         let user = jwt.verify(authToken, process.env.jwtSecret)
 
-        let totalFamilies = await stickerFamily.countDocuments({ isDeleted: false })
-        return NextResponse.json(totalFamilies)
+        if (user.type == "Admin") {
+            let totalFamilies = await stickerFamily.countDocuments({ isDeleted: false })
+            return NextResponse.json(totalFamilies)
+        }
+        else {
+            let totalFamilies = await stickerFamily.countDocuments({ createdBy: user._id, isDeleted: false })
+            return NextResponse.json(totalFamilies)
+        }
     }
     catch (error) {
         return NextResponse.json("error")

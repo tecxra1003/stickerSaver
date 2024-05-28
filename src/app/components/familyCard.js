@@ -23,7 +23,6 @@ export default function FamilyCard({ name, thumbnail, id }) {
     useEffect(() => {
         if (session && !familyData) {
             getFamily()
-            console.log(familyData?.stickers?.length)
         }
     }, [session])
 
@@ -31,9 +30,9 @@ export default function FamilyCard({ name, thumbnail, id }) {
 
         <div>
             {session && familyData && <Card
-                onClick={() => { router.push(`/dashboard/sticker/${name}/${id}`) }}
+                onClick={() => { router.push(`/dashboard/sticker/${id}`) }}
                 className="m-2 z-30"
-                // hoverable
+                hoverable
                 style={{
                     width: 240,
 
@@ -45,7 +44,7 @@ export default function FamilyCard({ name, thumbnail, id }) {
                 <Meta
                     title={name}
                     avatar={<Avatar src={thumbnail} size={70} />}
-                    description={`Stickers: ${familyData?.stickers?.length}`}
+                    description={`Stickers: ${familyData?.stickers.filter((sticker) => sticker.isDeleted == false).map(data => data).length}`}
                 />
 
 

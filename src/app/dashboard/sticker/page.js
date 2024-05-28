@@ -8,9 +8,12 @@ import { useEffect, useState } from "react";
 export default function Sticker() {
     let { data: session } = useSession()
     const [stickerData, setStickerData] = useState(null)
+    const [totalStickers, setTotalStickers] = useState(null)
     const [page, setPage] = useState(1)
     const [loader, setLoader] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
+    const [reload, setReload] = useState(false)
+
     const [limit, setLimit] = useState(20)
     async function getSticker() {
         setLoader(true)
@@ -21,6 +24,15 @@ export default function Sticker() {
                 'authToken': session.accessToken,
             },
         })
+        let TotalStickers = await fetch("/api/getDashboardStats/stickersOfUser", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authToken': session.accessToken,
+            },
+
+        })
+        setTotalStickers(await TotalStickers.json())
         setStickerData(await Sticker.json())
         setLoader(false)
     }
@@ -33,12 +45,14 @@ export default function Sticker() {
         if (session) {
             getSticker()
         }
-    }, [page, limit, isOpen])
+    }, [page, limit, reload])
     function changePagination(page, pageSize) {
         setPage(page);
         setLimit(pageSize)
 
     }
+    const showTotal = (total) => `Total ${total} items`;
+
     return (
         <div className="flex justify-center z-50">
             <Spin spinning={loader} size="large" fullscreen />
@@ -52,7 +66,7 @@ export default function Sticker() {
                 <FloatButton className="bottom-28 right-12" type="primary" onClick={() => setIsOpen(true)} tooltip={<div>Create New Sticker Family</div>} />
             </ConfigProvider>
             <Modal open={isOpen} onCancel={() => setIsOpen(false)} footer={null} maskClosable={false} mask={true} destroyOnClose  >
-                <CreateSticker setIsOpen={setIsOpen} />
+                <CreateSticker setIsOpen={setIsOpen} setReload={setReload} reload={reload} task={"Create"} />
             </Modal>
 
             <div className="flex mb-8  w-5/6 flex-wrap">
@@ -61,7 +75,7 @@ export default function Sticker() {
                     <div key={data._id}  >
 
 
-                        <StickerCard name={data.name} image={data.image} id={data._id} stickerFamilyId={data.stickerFamilyId} />
+                        <StickerCard name={data.name} image={data.image} id={data._id} setReload={setReload} reload={reload} stickerFamilyId={data.stickerFamilyId} />
 
                     </div>
                 ))}
@@ -69,7 +83,7 @@ export default function Sticker() {
 
             <div className="fixed bottom-0 left-0 right-0 z-50">
                 <div className="p-3 mt-5 flex justify-center  bg-white">
-                    <Pagination defaultCurrent={page} total={500} pageSize={limit} onChange={changePagination} />
+                    <Pagination defaultCurrent={page} total={totalStickers} pageSize={limit} showSizeChanger showTotal={showTotal} onChange={changePagination} />
                 </div>
             </div>
         </div>

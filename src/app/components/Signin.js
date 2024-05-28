@@ -43,7 +43,6 @@ export default function Signin() {
       if (res.error) {
 
         setError("invalid credentials")
-        console.log(error)
         setSignInLoader(false)
         return
       }
