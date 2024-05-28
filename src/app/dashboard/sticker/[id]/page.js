@@ -113,8 +113,8 @@ export default function Sticker({ params }) {
                     </div>
 
                 </div>}
-                <Modal open={isDeleteOpen} onCancel={() => setIsDeleteOpen(false)} footer={null} maskClosable={false} mask={true} destroyOnClose centered
-                >                    <DeleteDialog reload={reload} setReload={setReload} deleted={deleted} setIsDeleteOpen={setIsDeleteOpen} />
+                <Modal open={isDeleteOpen} onCancel={() => setIsDeleteOpen(false)} footer={null} maskClosable={false} mask={true} destroyOnClose centered>
+                    <DeleteDialog reload={reload} setReload={setReload} deleted={deleted} setIsDeleteOpen={setIsDeleteOpen} />
                 </Modal>
             </div>
             <div className="flex justify-center z-50">

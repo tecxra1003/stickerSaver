@@ -4,7 +4,7 @@ import { useState } from "react";
 import { DeleteOutlined } from '@ant-design/icons';
 
 
-export default function CreateFamily({ setIsOpen }) {
+export default function CreateFamily({ setIsOpen, setReload, reload }) {
     const { data: session } = useSession()
     const [name, setName] = useState("")
     const [error, setError] = useState("")
@@ -52,6 +52,7 @@ export default function CreateFamily({ setIsOpen }) {
 
             }),
         });
+        setReload(!reload)
         setIsOpen(false)
         setLoader(false)
     }

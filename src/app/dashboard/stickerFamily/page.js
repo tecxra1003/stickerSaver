@@ -11,6 +11,7 @@ export default function Stickerfamily() {
     const [page, setPage] = useState(1)
     const [loader, setLoader] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
+    const [reload, setReload] = useState(false)
     const [limit, setLimit] = useState(20)
     const [totalFamilies, setTotalFamilies] = useState(20)
     async function getStickerFamilies() {
@@ -43,7 +44,7 @@ export default function Stickerfamily() {
         if (session) {
             getStickerFamilies()
         }
-    }, [page, limit, isOpen])
+    }, [page, limit, reload])
     function changePagination(page, pageSize) {
         setLoader(true)
         setPage(page);
@@ -64,7 +65,7 @@ export default function Stickerfamily() {
                 <FloatButton className="bottom-28 right-12" type="primary" onClick={() => setIsOpen(true)} tooltip={<div>Create New Sticker Family</div>} />
             </ConfigProvider>
             <Modal open={isOpen} onCancel={() => setIsOpen(false)} footer={null} maskClosable={false} mask={true} destroyOnClose  >
-                <CreateFamily setIsOpen={setIsOpen} task={"Create"} />
+                <CreateFamily setIsOpen={setIsOpen} task={"Create"} setReload={setReload} reload={reload} />
             </Modal>
 
             <div className="flex mb-8 w-5/6 flex-wrap">
