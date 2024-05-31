@@ -11,7 +11,7 @@ export default function FamilyCard({ name, thumbnail, id }) {
     const [familyData, setFamilyData] = useState()
     async function getFamily() {
 
-        const family = await fetch(`/api/stickerFamily/getSingle/${id}`, {
+        const family = await fetch(`/api/stickerFamily/getDetail/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

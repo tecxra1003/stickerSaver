@@ -40,7 +40,7 @@ export default function CreateSticker({ setIsOpen, task, id, reload, setReload, 
     }
     async function getSticker() {
         setLoader(true)
-        let sticker = await fetch(`/api/sticker/getSingle/${id}`, {
+        let sticker = await fetch(`/api/sticker/getDetail/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

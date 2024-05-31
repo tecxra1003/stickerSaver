@@ -12,9 +12,7 @@ export async function POST(req) {
             return NextResponse.json("please insert 2-5 Images ")
 
         }
-        console.log(reqData.isCustom)
         let createFamily = await StickerFamily.create({ name: reqData.name, thumbnail: reqData.thumbnail, isCustom: reqData.isCustom, createdBy: new ObjectId(reqData.userId) })
-        console.log("first")
         for (let i = 0; i < images.length; i++) {
             let sticker = await Sticker.create({ image: images[i], isCustom: reqData.isCustom, createdBy: new ObjectId(reqData.userId), stickerFamilyId: createFamily._id })
         }

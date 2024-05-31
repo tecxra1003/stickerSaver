@@ -1,4 +1,4 @@
-import { Avatar, Button, Radio, Spin } from "antd";
+import { Avatar, Button, Checkbox, Radio, Spin } from "antd";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { DeleteOutlined } from '@ant-design/icons';
@@ -14,7 +14,7 @@ export default function CreateFamily({ setIsOpen, setReload, reload, task, id })
     const [imageUrl, setImageUrl] = useState([])
     async function getFamilyData() {
         setLoader(true)
-        let StickerFamily = await fetch(`/api/stickerFamily/getSingle/${id}`, {
+        let StickerFamily = await fetch(`/api/stickerFamily/getDetail/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -121,21 +121,22 @@ export default function CreateFamily({ setIsOpen, setReload, reload, task, id })
                         {imageUrl.length < 5 && task == "Create" && <input onChange={saveImage} type="file" />}
                     </div>
 
-                    <Radio.Group onChange={selectThumbnail} >
-                        <div className="flex  flex-wrap justify-center  ">
+                    {/* <Radio.Group onChange={selectThumbnail} > */}
+                    <div className="flex  flex-wrap justify-center  ">
 
-                            {imageUrl &&
-                                imageUrl.map((image, index) => (
-                                    <div key={index} className="flex p-1 m-1 border justify-around" >
+                        {imageUrl &&
+                            imageUrl.map((image, index) => (
+                                <div key={index} className="flex p-1 m-1 border justify-around" >
 
-                                        <Radio value={index} name="stickers" ><Avatar src={image} size={60} /></Radio>
-                                        {task == "Create" && <Button className="m-3" onClick={() => filterImage(index)}><DeleteOutlined /></Button>}
-                                    </div>
-                                )
-                                )
-                            }
-                        </div>
-                    </Radio.Group>
+                                    <Checkbox onChange={selectThumbnail} value={index} checked={index == thumbnail}
+                                        name="stickers" ><Avatar src={image} size={60} /></Checkbox>
+                                    {task == "Create" && <Button className="m-3 border-none" onClick={() => filterImage(index)}><DeleteOutlined /></Button>}
+                                </div>
+                            )
+                            )
+                        }
+                    </div>
+                    {/* </Radio.Group> */}
                 </div>
                 <Button onClick={CreateFamily}>{task} Family</Button>
                 {error &&

@@ -13,7 +13,7 @@ export default function StickerCard({ name, image, id, stickerFamilyId, reload, 
     const [isUpdateOpen, setIsUpdateOpen] = useState(false)
     async function getFamily() {
 
-        const family = await fetch(`/api/stickerFamily/getSingle/${stickerFamilyId}`, {
+        const family = await fetch(`/api/stickerFamily/getDetail/${stickerFamilyId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

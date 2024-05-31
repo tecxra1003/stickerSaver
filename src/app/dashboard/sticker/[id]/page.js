@@ -22,7 +22,7 @@ export default function Sticker({ params }) {
     const [limit, setLimit] = useState(20)
     async function getSticker() {
         setLoader(true)
-        let StickerFamily = await fetch(`/api/stickerFamily/getSingle/${params.id}`, {
+        let StickerFamily = await fetch(`/api/stickerFamily/getDetail/${params.id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

@@ -8,7 +8,6 @@ export async function GET(req, context) {
         const page = searchParams.get('page')
         let user = await User.find({ _id: context.params.id })
         user = user[0]
-        console.log("user", user)
         if (user.type == "User") {
             let getSticker = await Sticker.find({ createdBy: context.params.id, isDeleted: false }).sort({ createdAt: -1 }).limit(limit).skip((page) * limit)
 
