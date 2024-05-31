@@ -1,14 +1,10 @@
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken"
-import stickerFamily from "../../model/stickerFamilyModel";
-export async function GET(req) {
+import stickerFamily from "../../../model/stickerFamilyModel";
+import User from "@/app/api/model/userModel";
+export async function GET(req, context) {
     try {
-        let authToken = req.headers.get("authToken")
-        if (!authToken) {
-            return NextResponse.json("unAuthorized1")
-
-        }
-        let user = jwt.verify(authToken, process.env.jwtSecret)
+        let user = await User.find({ _id: context.params.id })
+        user = user[0]
 
         if (user.type == "Admin") {
             let totalFamilies = await stickerFamily.countDocuments({ isDeleted: false })

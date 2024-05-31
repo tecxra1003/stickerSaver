@@ -17,22 +17,36 @@ export default function Sticker() {
     const [limit, setLimit] = useState(20)
     async function getSticker() {
         setLoader(true)
-        let Sticker = await fetch(`/api/sticker/getAll?limit=${limit}&page=${page - 1}`, {
+        let Sticker = await fetch(`/api/sticker/getAll/${session.user.id}?limit=${limit}&page=${page - 1}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'authToken': session.accessToken,
             },
         })
-        let TotalStickers = await fetch("/api/getDashboardStats/stickersOfUser", {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'authToken': session.accessToken,
-            },
+        if (session.user.type == "User") {
+            let TotalStickers = await fetch(`/api/getDashboardStats/stickersOfUser/${session.user.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authToken': session.accessToken,
+                },
 
-        })
-        setTotalStickers(await TotalStickers.json())
+            })
+
+            setTotalStickers(await TotalStickers.json())
+        }
+        else {
+            let TotalStickers = await fetch(`/api/getDashboardStats/stickers/${session.user.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authToken': session.accessToken,
+                },
+
+            })
+            setTotalStickers(await TotalStickers.json())
+        }
         setStickerData(await Sticker.json())
         setLoader(false)
     }

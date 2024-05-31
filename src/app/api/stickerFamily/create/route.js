@@ -1,29 +1,27 @@
 import { NextResponse } from "next/server";
 import StickerFamily from "../../model/stickerFamilyModel";
-import jwt from "jsonwebtoken"
 import Sticker from "../../model/stickerModel";
+import { ObjectId } from "mongodb";
+
 export async function POST(req) {
     try {
         let reqData = await req.json()
-        let authToken = req.headers.get("authToken")
-        if (!authToken) {
-            return NextResponse.json("unAuthorized")
 
-        }
         let images = reqData.stickerImage
         if (!images || images.length < 2 || images.length > 5) {
             return NextResponse.json("please insert 2-5 Images ")
 
         }
-        let user = jwt.verify(authToken, process.env.jwtSecret)
-        let createFamily = await StickerFamily.create({ name: reqData.name, thumbnail: reqData.thumbnail, isCustom: user.type == "Admin" ? false : true, createdBy: user._id })
+        console.log(reqData.isCustom)
+        let createFamily = await StickerFamily.create({ name: reqData.name, thumbnail: reqData.thumbnail, isCustom: reqData.isCustom, createdBy: new ObjectId(reqData.userId) })
+        console.log("first")
         for (let i = 0; i < images.length; i++) {
-            let sticker = await Sticker.create({ image: images[i], isCustom: true, createdBy: user._id, stickerFamilyId: createFamily._id })
+            let sticker = await Sticker.create({ image: images[i], isCustom: reqData.isCustom, createdBy: new ObjectId(reqData.userId), stickerFamilyId: createFamily._id })
         }
         return NextResponse.json(createFamily)
     }
     catch (error) {
-        return NextResponse.json("error")
+        return NextResponse.json(error, { status: 400 })
 
     }
 

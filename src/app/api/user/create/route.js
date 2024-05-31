@@ -10,7 +10,7 @@ export async function POST(req) {
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(user.password, salt)
 
-        const createUser = await User.create({ name: user.name, email: user.email, password: hash, imageUrl: user.url, type: user.type })
+        const createUser = await User.create({ name: user.name, email: user.email, password: hash, type: user.type })
         return NextResponse.json(user)
     }
     catch (error) {

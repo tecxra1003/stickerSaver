@@ -10,7 +10,7 @@ export default function CreateSticker({ setIsOpen, task, id, reload, setReload, 
     const [error, setError] = useState("")
     const [loader, setLoader] = useState(false)
     const [imageUrl, setImageUrl] = useState()
-    const [stickerFamilyId, setStickerFamilyId] = useState(familyId)
+    const [stickerFamilyId, setStickerFamilyId] = useState(familyId ? familyId : "")
     const [stickerFamilies, setStickerFamilies] = useState()
     function saveImage(e) {
         const file = e.target.files[0];
@@ -28,11 +28,10 @@ export default function CreateSticker({ setIsOpen, task, id, reload, setReload, 
         if (task == "Update") { getSticker() }
     }, [session])
     async function getStickerFamilies() {
-        let families = await fetch(`/api/stickerFamily/getAll`, {
+        let families = await fetch(`/api/stickerFamily/getAll/${session.user.id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'authToken': session.accessToken,
             },
         })
 
@@ -45,7 +44,6 @@ export default function CreateSticker({ setIsOpen, task, id, reload, setReload, 
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'authToken': session.accessToken,
             },
         })
 
@@ -73,19 +71,19 @@ export default function CreateSticker({ setIsOpen, task, id, reload, setReload, 
 
         setLoader(true)
 
-        if (task == "create") {
+        if (task == "Create") {
             let createdSticker = await fetch('/api/sticker/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'authToken': session.accessToken
                 },
 
                 body: JSON.stringify({
                     name: name,
                     image: imageUrl,
                     stickerFamilyId: stickerFamilyId,
-
+                    userId: session.user.id,
+                    isCustom: session.user.type == "Admin" ? false : true
                 }),
             });
         }
@@ -94,7 +92,6 @@ export default function CreateSticker({ setIsOpen, task, id, reload, setReload, 
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'authToken': session.accessToken
                 },
 
                 body: JSON.stringify({
@@ -105,8 +102,8 @@ export default function CreateSticker({ setIsOpen, task, id, reload, setReload, 
 
                 }),
             });
-            setReload(!reload)
         }
+        setReload(!reload)
         setLoader(false)
 
         setIsOpen(false)
@@ -119,7 +116,7 @@ export default function CreateSticker({ setIsOpen, task, id, reload, setReload, 
             <Spin spinning={loader} >
 
                 <div className="text-center text-2xl font-semibold">
-                    Create A New Sticker
+                    {task} Sticker
                 </div>
 
                 <div className="m-2 ">

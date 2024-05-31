@@ -16,30 +16,27 @@ export default function Dashboard() {
     async function fetchCountOfStickers() {
         setLoader(true)
         if (session.user.type == "Admin") {
-            let getStickerFamilies = await fetch("/api/getDashboardStats/stickerFamilies", {
+            let getStickerFamilies = await fetch(`/api/getDashboardStats/stickerFamilies/${session.user.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'authToken': session.accessToken,
                 },
 
             })
             setStickerFamilies(await getStickerFamilies.json())
-            let getStickers = await fetch("/api/getDashboardStats/stickers", {
+            let getStickers = await fetch(`/api/getDashboardStats/stickers/${session.user.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'authToken': session.accessToken,
                 },
 
             })
             setStickers(await getStickers.json())
         }
-        let getStickerOfUser = await fetch("/api/getDashboardStats/stickersOfUser", {
+        let getStickerOfUser = await fetch(`/api/getDashboardStats/stickersOfUser/${session.user.id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'authToken': session.accessToken,
             },
 
         })

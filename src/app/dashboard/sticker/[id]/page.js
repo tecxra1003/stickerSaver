@@ -22,7 +22,7 @@ export default function Sticker({ params }) {
     const [limit, setLimit] = useState(20)
     async function getSticker() {
         setLoader(true)
-        let StickerFamily = await fetch(`/api/stickerFamily/getSingle/${params.id}?limit=${limit}&page=${page - 1}`, {
+        let StickerFamily = await fetch(`/api/stickerFamily/getSingle/${params.id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -57,36 +57,9 @@ export default function Sticker({ params }) {
             getSticker()
         }
     }, [page, limit, reload])
-    function changePagination(page, pageSize) {
-        setLoader(true)
-        setPage(page);
-        setLimit(pageSize)
-        setLoader(false)
-    }
-    function openUpdate() {
-        setIsOpenUpdate(true)
-        setName(stickerData.name)
-    }
-    async function update() {
-        setLoader(true)
-        let StickerFamily = await fetch(`/api/stickerFamily/update`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'authToken': session.accessToken,
-            },
-            body: JSON.stringify({
-                name: name,
-                id: params.id,
-
-            }),
-        })
-
-        getSticker()
-        setIsOpenUpdate(false)
 
 
-    }
+
     const showTotal = (total) => `Total ${total} items`;
 
     return (
@@ -95,26 +68,19 @@ export default function Sticker({ params }) {
                 <Spin spinning={loader} size="large" fullscreen />
                 {stickerData && <div className="flex items-center border p-2 m-1 justify-between w-full">
                     <Avatar src={stickerData.thumbnail} size={80} />
-                    {!isOpenUpdate && <div> {stickerData.name}</div>}
-                    {isOpenUpdate &&
-                        <div className="flex items-end ">
+                    <div> {stickerData.name}</div>
 
-                            <div className="text-lg flex flex-col">
-
-                                <label >Enter new name</label>
-                                <input type="text" autoFocus value={name} onChange={(e) => setName(e.target.value)} />
-                            </div>
-                        </div>
-                    }
                     <div className="flex flex-col ">
-                        {isOpenUpdate && <Button className="mx-2" type="primary" onClick={update}>Update</Button>}
-                        {!isOpenUpdate && <Button className="m-1" type="primary" onClick={openUpdate} >Edit Family</Button>}
+                        <Button className="m-1" type="primary" onClick={() => setIsOpenUpdate(true)} >Edit Family</Button>
                         <Button className="m-1" type="primary" danger onClick={() => setIsDeleteOpen(true)} >Delete Family</Button>
                     </div>
 
                 </div>}
                 <Modal open={isDeleteOpen} onCancel={() => setIsDeleteOpen(false)} footer={null} maskClosable={false} mask={true} destroyOnClose centered>
                     <DeleteDialog reload={reload} setReload={setReload} deleted={deleted} setIsDeleteOpen={setIsDeleteOpen} />
+                </Modal>
+                <Modal open={isOpenUpdate} onCancel={() => setIsOpenUpdate(false)} footer={null} maskClosable={false} mask={true} destroyOnClose  >
+                    <CreateFamily task={"Update"} id={params.id} setIsOpen={setIsOpenUpdate} setReload={setReload} reload={reload} />
                 </Modal>
             </div>
             <div className="flex justify-center z-50">
@@ -129,7 +95,7 @@ export default function Sticker({ params }) {
                     <FloatButton className="bottom-28 right-12" type="primary" onClick={() => setIsOpenCreate(true)} tooltip={<div>Create New Sticker Family</div>} />
                 </ConfigProvider>
                 <Modal open={isOpenCreate} onCancel={() => setIsOpenCreate(false)} footer={null} maskClosable={false} mask={true} destroyOnClose  >
-                    <CreateSticker setIsOpenCreate={setIsOpenCreate} setReload={setReload} reload={reload} familyId={params.id} />
+                    <CreateSticker task={"Create"} setIsOpen={setIsOpenCreate} setReload={setReload} reload={reload} familyId={params.id} />
                 </Modal>
 
                 <div className="flex w-5/6 flex-wrap">

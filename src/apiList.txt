@@ -1,0 +1,79 @@
+/api/auth(nextauth)
+
+
+/api/getDashboardStats/stickers/[id]
+    (no request data)
+
+/api/getDashboardStats/stickerFamilies/[id]
+    (no request data)
+
+/api/getDashboardStats/stickersOfUSer/[id]
+    (no request data)
+
+/api/sticker/create
+    {
+    name:[name]
+    image:[image]
+    isCustom:[isCustom]
+    userId:[userId]
+    stickerFamilyId:[stickerFamilyId]
+    }
+
+
+/api/sticker/delete/[id]
+    (no request data)
+
+/api/sticker/getAll/[id]?limit=[limit]&page=[page]
+    (query=>limit,page)
+
+/api/sticker/getSingle/[id]
+    (no request data)
+
+/api/sticker/update
+    {
+    id:[id]
+    name:[name]
+    image:[image]
+    isCustom:[isCustom]
+    stickerFamilyId:[stickerFamilyId]
+    }
+
+/api/stickerFamily/create
+    {
+    name:[name]
+    thumbnail:[thumbnail]
+    isCustom:[isCustom]
+    userId:[userId]
+    stickerImage:[stickerImage]
+    }
+
+
+/api/stickerFamily/delete/[id]
+    (no request data)
+
+/api/stickerFamily/getAll/[id]?limit=[limit]&page=[page]
+    (query=>limit,page)
+
+
+/api/stickerFamily/getSingle/[id]
+    (no request data)
+
+/api/stickerFamily/update
+    {
+    id:[id]
+    name:[name]
+    thumbnail:[thumbnail]
+    isCustom:[isCustom]
+    }
+
+
+
+
+
+/api/user/create
+    {
+    name:[name]
+    email:[email]
+    password:[password]
+    type:[type]
+    }

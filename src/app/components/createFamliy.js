@@ -1,16 +1,36 @@
 import { Avatar, Button, Radio, Spin } from "antd";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DeleteOutlined } from '@ant-design/icons';
 
 
-export default function CreateFamily({ setIsOpen, setReload, reload }) {
+export default function CreateFamily({ setIsOpen, setReload, reload, task, id }) {
     const { data: session } = useSession()
     const [name, setName] = useState("")
     const [error, setError] = useState("")
     const [loader, setLoader] = useState(false)
-    const [thumbnail, setThumbnail] = useState("");
+    const [thumbnail, setThumbnail] = useState();
+    const [thumbnailImage, setThumbnailImage] = useState();
     const [imageUrl, setImageUrl] = useState([])
+    async function getFamilyData() {
+        setLoader(true)
+        let StickerFamily = await fetch(`/api/stickerFamily/getSingle/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        StickerFamily = await StickerFamily.json()
+        setName(StickerFamily.name)
+        setImageUrl(StickerFamily.stickers.filter((sticker) => sticker.isDeleted == false).map(data => data.image))
+        setThumbnailImage(StickerFamily.thumbnail)
+        setLoader(false)
+    }
+    useEffect(() => {
+        if (session && task == "Update") {
+            getFamilyData()
+        }
+    }, [session])
     function saveImage(e) {
         const file = e.target.files[0];
         var reader = new FileReader();
@@ -29,29 +49,48 @@ export default function CreateFamily({ setIsOpen, setReload, reload }) {
             setError("please enter name")
             return
         }
-        else if (imageUrl.length < 2) {
+        else if (task == "Create" && imageUrl.length < 2) {
             setError("select Atleast 2 stickers")
             return
         }
-        else if (thumbnail == null) {
+        else if (thumbnail == null && task == "Create") {
             setError("Select a thumbnail")
             return
         }
         setLoader(true)
-        let createdFamily = await fetch('/api/stickerFamily/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'authToken': session.accessToken
-            },
+        if (task == "Create") {
+            let createdFamily = await fetch('/api/stickerFamily/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
 
-            body: JSON.stringify({
-                name: name,
-                thumbnail: imageUrl[thumbnail],
-                stickerImage: imageUrl,
+                },
 
-            }),
-        });
+                body: JSON.stringify({
+                    name: name,
+                    thumbnail: imageUrl[thumbnail],
+                    stickerImage: imageUrl,
+                    userId: session.user.id,
+                    isCustom: session.user.type == "Admin" ? false : true
+
+                }),
+            });
+        }
+        if (task == "Update") {
+            let StickerFamily = await fetch(`/api/stickerFamily/update`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: name,
+                    id: id,
+                    thumbnail: thumbnail ? imageUrl[thumbnail] : thumbnailImage,
+
+
+                }),
+            })
+        }
         setReload(!reload)
         setIsOpen(false)
         setLoader(false)
@@ -68,7 +107,7 @@ export default function CreateFamily({ setIsOpen, setReload, reload }) {
             <Spin spinning={loader} >
 
                 <div className="text-center text-2xl font-semibold">
-                    Create A New Sticker Family
+                    {task} Family
                 </div>
                 <div>
                     <label className="block text-lg font-medium  text-gray-900">Name</label>
@@ -79,7 +118,7 @@ export default function CreateFamily({ setIsOpen, setReload, reload }) {
                 <div>
                     <label className="block text-lg font-medium  text-gray-900">Add Sticker (2-5)</label>
                     <div className="my-2">
-                        {imageUrl.length < 5 && <input onChange={saveImage} type="file" />}
+                        {imageUrl.length < 5 && task == "Create" && <input onChange={saveImage} type="file" />}
                     </div>
 
                     <Radio.Group onChange={selectThumbnail} >
@@ -90,7 +129,7 @@ export default function CreateFamily({ setIsOpen, setReload, reload }) {
                                     <div key={index} className="flex p-1 m-1 border justify-around" >
 
                                         <Radio value={index} name="stickers" ><Avatar src={image} size={60} /></Radio>
-                                        <Button className="m-3" onClick={() => filterImage(index)}><DeleteOutlined /></Button>
+                                        {task == "Create" && <Button className="m-3" onClick={() => filterImage(index)}><DeleteOutlined /></Button>}
                                     </div>
                                 )
                                 )
@@ -98,7 +137,7 @@ export default function CreateFamily({ setIsOpen, setReload, reload }) {
                         </div>
                     </Radio.Group>
                 </div>
-                <Button onClick={CreateFamily}>Upload Family</Button>
+                <Button onClick={CreateFamily}>{task} Family</Button>
                 {error &&
                     <div className="bg-red-500 flex w-fit border rounded-md p-1 my-2"> {error}</div>
                 }

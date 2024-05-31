@@ -16,14 +16,14 @@ export default function Stickerfamily() {
     const [totalFamilies, setTotalFamilies] = useState(20)
     async function getStickerFamilies() {
         setLoader(true)
-        let stickerFamilies = await fetch(`/api/stickerFamily/getAll?limit=${limit}&page=${page - 1}`, {
+        let stickerFamilies = await fetch(`/api/stickerFamily/getAll/${session.user.id}?limit=${limit}&page=${page - 1}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'authToken': session.accessToken,
             },
         })
-        let getFamiliesCount = await fetch("/api/getDashboardStats/stickerFamilies", {
+        let getFamiliesCount = await fetch(`/api/getDashboardStats/stickerFamilies/${session.user.id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
