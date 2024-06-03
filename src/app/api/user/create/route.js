@@ -3,7 +3,7 @@ import User from "../../model/userModel";
 import bcrypt, { hash } from "bcrypt"
 import dbConnect from "@/app/lib/mongodb";
 export async function POST(req) {
-    await dbConnect()
+    dbConnect()
 
     try {
 
