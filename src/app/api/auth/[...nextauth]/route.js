@@ -15,26 +15,26 @@ export const authOptions = {
 
                 const { email, password } = credentials
                 // await dbConnect()
-                // const user = await User.findOne({ email });
-                // if (!user) {
-                //     return null
-                // }
-                // const matchedPassword = await bcrypt.compare(password, user.password)
-                // if (!matchedPassword) {
-                //     return null
-                // }
+                const user = await User.findOne({ email });
+                if (!user) {
+                    return null
+                }
+                const matchedPassword = await bcrypt.compare(password, user.password)
+                if (!matchedPassword) {
+                    return null
+                }
 
 
 
 
-                return 123
+                return user
 
 
             }
         })
     ],
 
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: "ammadisagoodboy",
     pages: {
         signIn: "/"
     },
