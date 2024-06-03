@@ -1,6 +1,9 @@
 import Navbar from "./components/Navbar";
 import SignIn from "./components/Signin";
+import dbConnect from "./lib/mongodb";
 export default function Home() {
+  dbConnect()
+
   return (
 
     <div className=" ">

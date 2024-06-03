@@ -5,11 +5,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { Button } from "antd";
-import dbConnect from "../lib/mongodb";
 
 
 export default function Signin() {
-  dbConnect()
   const { data: session } = useSession();
   const [signInLoader, setSignInLoader] = useState(false);
   const [email, setEmail] = useState("");
