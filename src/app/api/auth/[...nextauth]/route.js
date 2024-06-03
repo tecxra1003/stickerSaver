@@ -2,8 +2,10 @@ import NextAuth from "next-auth/next"
 import CredentialsProvider from "next-auth/providers/credentials"
 import User from "../../model/userModel";
 import bcrypt from "bcrypt"
+import dbConnect from "@/app/lib/mongodb";
 
 export const authOptions = {
+    dbConnect(),
     providers: [
         CredentialsProvider({
             name: 'credentials',
