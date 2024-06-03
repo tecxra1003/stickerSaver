@@ -5,6 +5,7 @@ import AuthProvider from "./provider";
 import dbConnect from "./lib/mongodb";
 import Navbar from "./components/Navbar";
 import SideBar from "./components/SideBar";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
