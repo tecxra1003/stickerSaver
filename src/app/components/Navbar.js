@@ -2,19 +2,21 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Avatar } from "antd";
+import { useSession } from "next-auth/react";
 
 
 
 
 export default function Navbar() {
+    const { data: session } = useSession()
     const [namesInitial, setNamesInitial] = useState("AM")
- 
 
 
 
 
 
-  
+
+
 
 
 
@@ -28,25 +30,25 @@ export default function Navbar() {
             <div className="flex "> </div>
             <div className="flex ">
 
-            
-                    <div className="flex justify-center text-center mr-2">
 
-                        <div className="relative z-50">
-                            <div>
+                <div className="flex justify-center text-center mr-2">
 
-                                <div className=" flex justify-center m-3 border-white">
-                                  <Avatar size={60}>{namesInitial.toUpperCase()}</Avatar>
+                    <div className="relative z-50">
+                        <div>
 
-                                 
+                            <div className=" flex justify-center m-3 border-white">
+                                {session && <Avatar size={60}>{namesInitial.toUpperCase()}</Avatar>}
 
 
 
-                                </div>
+
+
                             </div>
-
                         </div>
+
                     </div>
-                
+                </div>
+
 
             </div>
 
