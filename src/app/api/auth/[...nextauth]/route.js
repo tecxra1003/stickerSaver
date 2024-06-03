@@ -12,7 +12,6 @@ export const authOptions = {
 
             credentials: {},
             async authorize(credentials, req) {
-                await dbConnect()
 
                 const { email, password } = credentials
                 const user = await User.findOne({ email });
@@ -27,22 +26,7 @@ export const authOptions = {
 
 
 
-                return {
-                    "_id": "665d6cb25fa68286e5f9e5e2",
-                    "name": "ammad khan",
-                    "email": "abc@gmail.com",
-                    "password": "$2b$10$juwCNlj8HEzzEnJbTT/NwOG09VyOqOyehUjEBYf8lgp6cXD7WMLEm",
-                    "type": "User",
-                    "isDeleted": false,
-                    "deletedAt": null,
-                    "createdAt": {
-                        "$date": "2024-06-03T07:11:46.766Z"
-                    },
-                    "updatedAt": {
-                        "$date": "2024-06-03T07:11:46.766Z"
-                    },
-                    "__v": 0
-                }
+                return user
 
 
             }
