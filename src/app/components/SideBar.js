@@ -1,6 +1,6 @@
 "use client"
 import { Button, Menu } from "antd";
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import { AppstoreOutlined } from '@ant-design/icons';
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
@@ -63,7 +63,7 @@ export default function SideBar() {
 
 
         <Menu
-            onClick={({ key, keyPath, domEvent }) => onclick(key)}
+            onClick={({ key }) => onclick(key)}
 
             mode="inline"
             items={items}

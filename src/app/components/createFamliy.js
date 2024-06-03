@@ -1,4 +1,4 @@
-import { Avatar, Button, Checkbox, Radio, Spin } from "antd";
+import { Avatar, Button, Checkbox, Spin } from "antd";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { DeleteOutlined } from '@ant-design/icons';
@@ -7,23 +7,26 @@ import { DeleteOutlined } from '@ant-design/icons';
 export default function CreateFamily({ setIsOpen, setReload, reload, task, id }) {
     const { data: session } = useSession()
     const [name, setName] = useState("")
+    const [orignalName, setOrignalName] = useState("")
     const [error, setError] = useState("")
     const [loader, setLoader] = useState(false)
     const [thumbnail, setThumbnail] = useState();
     const [thumbnailImage, setThumbnailImage] = useState();
     const [imageUrl, setImageUrl] = useState([])
+
     async function getFamilyData() {
         setLoader(true)
-        let StickerFamily = await fetch(`/api/stickerFamily/getDetail/${id}`, {
+        let updatedFamily = await fetch(`/api/stickerFamily/getDetail/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
         })
-        StickerFamily = await StickerFamily.json()
-        setName(StickerFamily.name)
-        setImageUrl(StickerFamily.stickers.filter((sticker) => sticker.isDeleted == false).map(data => data.image))
-        setThumbnailImage(StickerFamily.thumbnail)
+        updatedFamily = await updatedFamily.json()
+        setName(updatedFamily.name)
+        setOrignalName(updatedFamily.name)
+        setImageUrl(updatedFamily.stickers.filter((sticker) => sticker.isDeleted == false).map(data => data.image))
+        setThumbnailImage(updatedFamily.thumbnail)
         setLoader(false)
     }
     useEffect(() => {
@@ -75,21 +78,32 @@ export default function CreateFamily({ setIsOpen, setReload, reload, task, id })
 
                 }),
             });
+            console.log(createdFamily)
+            if (createdFamily.status == 400) {
+                setLoader(false)
+                setError("Duplicate name not allowed")
+                return
+            }
         }
         if (task == "Update") {
-            let StickerFamily = await fetch(`/api/stickerFamily/update`, {
+            let updatedFamily = await fetch(`/api/stickerFamily/update`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    name: name,
+                    name: name != orignalName ? name : null,
                     id: id,
                     thumbnail: thumbnail ? imageUrl[thumbnail] : thumbnailImage,
 
 
                 }),
             })
+            if (updatedFamily.status == 400) {
+                setError("Duplicate name not allowed")
+                setLoader(false)
+                return
+            }
         }
         setReload(!reload)
         setIsOpen(false)
@@ -138,7 +152,7 @@ export default function CreateFamily({ setIsOpen, setReload, reload, task, id })
                     </div>
                     {/* </Radio.Group> */}
                 </div>
-                <Button onClick={CreateFamily}>{task} Family</Button>
+                <Button type="primary" onClick={CreateFamily}>{task} Family</Button>
                 {error &&
                     <div className="bg-red-500 flex w-fit border rounded-md p-1 my-2"> {error}</div>
                 }

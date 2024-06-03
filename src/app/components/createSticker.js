@@ -153,7 +153,7 @@ export default function CreateSticker({ setIsOpen, task, id, reload, setReload, 
                         </div>
                         }
                     </div>
-                    <Button onClick={createSticker}>{task} Sticker</Button>
+                    <Button type="primary" onClick={createSticker}>{task} Sticker</Button>
                 </div>
                 {error &&
                     <div className="bg-red-500 flex w-fit border rounded-md p-1 my-2"> {error}</div>

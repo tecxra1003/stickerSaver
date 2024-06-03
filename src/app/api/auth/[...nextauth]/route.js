@@ -2,7 +2,6 @@ import NextAuth from "next-auth/next"
 import CredentialsProvider from "next-auth/providers/credentials"
 import User from "../../model/userModel";
 import bcrypt from "bcrypt"
-import jwt from "jsonwebtoken"
 
 export const authOptions = {
     providers: [
@@ -43,7 +42,6 @@ export const authOptions = {
             if (user?.id) {
                 token.id = user.id;
                 token.type = user.type
-                token.accessToken = (jwt.sign(JSON.parse(JSON.stringify(user)), process.env.jwtSecret))
             }
 
 
@@ -52,7 +50,6 @@ export const authOptions = {
         async session({ session, token }) {
             session.user.id = token.id;
             session.user.type = token.type
-            // session.accessToken = token.accessToken
 
 
             return session;

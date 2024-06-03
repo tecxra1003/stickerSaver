@@ -6,7 +6,10 @@ import { ObjectId } from "mongodb";
 export async function POST(req) {
     try {
         let reqData = await req.json()
-
+        let stickerFamily = await StickerFamily.find({ name: reqData.name, isDeleted: false })
+        if (stickerFamily.length > 0) {
+            return NextResponse.json("each family must have a unique name", { status: 400 })
+        }
         let images = reqData.stickerImage
         if (!images || images.length < 2 || images.length > 5) {
             return NextResponse.json("please insert 2-5 Images ")

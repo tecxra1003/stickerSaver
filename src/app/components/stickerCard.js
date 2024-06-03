@@ -1,5 +1,5 @@
 "use client"
-import { Avatar, Card, Image, Modal } from "antd"
+import { Alert, Avatar, Card, Image, Modal, message } from "antd"
 import Meta from "antd/es/card/Meta"
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -10,7 +10,13 @@ export default function StickerCard({ name, image, id, stickerFamilyId, reload, 
     const { data: session } = useSession()
     const [familyData, setFamilyData] = useState()
     const [isDeleteOpen, setIsDeleteOpen] = useState(false)
-    const [isUpdateOpen, setIsUpdateOpen] = useState(false)
+    const [isUpdateOpen, setIsUpdateOpen] = useState("")
+    const [message, setMessage] = useState(false)
+    useEffect(() => {
+        setTimeout(() => {
+            setMessage("")
+        }, 4000);
+    }, [message])
     async function getFamily() {
 
         const family = await fetch(`/api/stickerFamily/getDetail/${stickerFamilyId}`, {
@@ -41,6 +47,10 @@ export default function StickerCard({ name, image, id, stickerFamilyId, reload, 
 
 
         });
+        if (deleted.status == 400) {
+            setMessage("A family must contain atleast 2 stickers")
+            return
+        }
         setReload(!reload)
     }
     function updateSticker() {
@@ -51,6 +61,7 @@ export default function StickerCard({ name, image, id, stickerFamilyId, reload, 
         <div>
             {familyData && session &&
                 <div>
+                    {message && <Alert className="fixed right-0 left-0 top-20  z-50" showIcon closable message={message} type="error" />}
 
                     <Card
                         className="m-2 z-30"

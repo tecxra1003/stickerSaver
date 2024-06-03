@@ -10,11 +10,11 @@ export default function Layout({ children }) {
 
         <div className='flex flex-col'>
 
-            <div className=''>
+            <div className='fixed mb-24 z-50'>
 
                 <Navbar />
             </div>
-            <div className='flex flex-row '>
+            <div className='flex flex-row mt-24'>
                 <div className={`${session ? "" : "hidden"} h-screen`} >
 
                     <SideBar />

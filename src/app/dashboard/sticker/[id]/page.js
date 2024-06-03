@@ -12,14 +12,11 @@ export default function Sticker({ params }) {
     let { data: session } = useSession()
     const router = useRouter()
     const [stickerData, setStickerData] = useState(null)
-    const [name, setName] = useState("")
-    const [page, setPage] = useState(1)
     const [reload, setReload] = useState(false)
     const [loader, setLoader] = useState(false)
     const [isOpenCreate, setIsOpenCreate] = useState(false)
     const [isOpenUpdate, setIsOpenUpdate] = useState(false)
     const [isDeleteOpen, setIsDeleteOpen] = useState(false)
-    const [limit, setLimit] = useState(20)
     async function getSticker() {
         setLoader(true)
         let StickerFamily = await fetch(`/api/stickerFamily/getDetail/${params.id}`, {
@@ -56,11 +53,10 @@ export default function Sticker({ params }) {
         if (session) {
             getSticker()
         }
-    }, [page, limit, reload])
+    }, [reload])
 
 
 
-    const showTotal = (total) => `Total ${total} items`;
 
     return (
         <>
@@ -92,7 +88,7 @@ export default function Sticker({ params }) {
                         },
                     }}
                 >
-                    <FloatButton className="bottom-28 right-12" type="primary" onClick={() => setIsOpenCreate(true)} tooltip={<div>Create New Sticker Family</div>} />
+                    <FloatButton className="bottom-28 right-12" type="primary" onClick={() => setIsOpenCreate(true)} tooltip={<div>Create New Sticker </div>} />
                 </ConfigProvider>
                 <Modal open={isOpenCreate} onCancel={() => setIsOpenCreate(false)} footer={null} maskClosable={false} mask={true} destroyOnClose  >
                     <CreateSticker task={"Create"} setIsOpen={setIsOpenCreate} setReload={setReload} reload={reload} familyId={params.id} />

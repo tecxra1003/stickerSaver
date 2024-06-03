@@ -77,7 +77,7 @@ export default function Sticker() {
                     },
                 }}
             >
-                <FloatButton className="bottom-28 right-12" type="primary" onClick={() => setIsOpen(true)} tooltip={<div>Create New Sticker Family</div>} />
+                <FloatButton className="bottom-28 right-12" type="primary" onClick={() => setIsOpen(true)} tooltip={<div>Create New Sticker </div>} />
             </ConfigProvider>
             <Modal open={isOpen} onCancel={() => setIsOpen(false)} footer={null} maskClosable={false} mask={true} destroyOnClose  >
                 <CreateSticker setIsOpen={setIsOpen} setReload={setReload} reload={reload} task={"Create"} />
