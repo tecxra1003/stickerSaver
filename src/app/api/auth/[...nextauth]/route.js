@@ -5,7 +5,7 @@ import bcrypt from "bcrypt"
 import dbConnect from "@/app/lib/mongodb";
 
 export const authOptions = {
-    dbConnect(),
+
     providers: [
         CredentialsProvider({
             name: 'credentials',
