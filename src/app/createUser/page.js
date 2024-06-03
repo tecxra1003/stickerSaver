@@ -85,6 +85,7 @@ export default function Create() {
             setRegister(false)
             return
         }
+        router.replace("dashboard")
 
 
 

@@ -15,6 +15,7 @@ export default function Signin() {
   const [error, setError] = useState("");
   const router = useRouter();
 
+
   useEffect(() => {
     if (session) {
 
@@ -22,12 +23,12 @@ export default function Signin() {
 
       const url = `dashboard`
 
-      router.replace(url)
-
+      router.replace("dashboard")
+      console.log(session)
 
     }
 
-  }, [session]);
+  });
 
   const handleSubmit = async (e) => {
 
@@ -40,6 +41,7 @@ export default function Signin() {
         password,
         redirect: false,
       })
+      router.replace("dashboard")
       if (res.error) {
 
         setError("invalid credentials")
@@ -52,6 +54,8 @@ export default function Signin() {
 
     }
     catch (error) {
+      setError("Error")
+      setSignInLoader(false)
 
     }
 

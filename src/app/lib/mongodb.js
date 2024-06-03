@@ -1,7 +1,7 @@
 
 import mongoose from 'mongoose'
 
-const mongodbUrl = "mongodb+srv://tecxra1003:tecmob1003@cluster0.arwd4rf.mongodb.net/stickerSaver"
+const mongodbUrl = process.env.mongodbUrl
 
 if (!mongodbUrl) {
   throw new Error(
