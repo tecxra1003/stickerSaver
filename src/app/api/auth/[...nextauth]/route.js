@@ -14,20 +14,20 @@ export const authOptions = {
             async authorize(credentials, req) {
 
                 const { email, password } = credentials
-                await dbConnect()
-                const user = await User.findOne({ email });
-                if (!user) {
-                    return null
-                }
-                const matchedPassword = await bcrypt.compare(password, user.password)
-                if (!matchedPassword) {
-                    return null
-                }
+                // await dbConnect()
+                // const user = await User.findOne({ email });
+                // if (!user) {
+                //     return null
+                // }
+                // const matchedPassword = await bcrypt.compare(password, user.password)
+                // if (!matchedPassword) {
+                //     return null
+                // }
 
 
 
 
-                return user
+                return 123
 
 
             }
