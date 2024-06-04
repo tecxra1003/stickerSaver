@@ -4,27 +4,30 @@ import { AppstoreOutlined } from '@ant-design/icons';
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
+import { usePathname } from 'next/navigation'
 
 
 export default function SideBar() {
     const [signOutLoader, setSignOutLoader] = useState(false)
     const router = useRouter()
+    const pathname = usePathname()
+
     const items = [
 
         {
-            key: 'dashboard',
+            key: '/dashboard',
             label: 'Dashboard ',
             icon: <AppstoreOutlined />,
 
         },
         {
-            key: 'stickerFamily',
+            key: '/dashboard/stickerFamily',
             label: 'Sticker Family',
             icon: <AppstoreOutlined />,
 
         },
         {
-            key: 'sticker',
+            key: '/dashboard/sticker',
             label: 'Sticker ',
             icon: <AppstoreOutlined />,
 
@@ -43,13 +46,13 @@ export default function SideBar() {
     ];
 
     const onclick = (key) => {
-        if (key == "dashboard") {
+        if (key == "/dashboard") {
             router.push("/dashboard")
         }
-        else if (key == "sticker") {
+        else if (key == "/dashboard/sticker") {
             router.push("/dashboard/sticker")
         }
-        else if (key == "stickerFamily") {
+        else if (key == "/dashboard/stickerFamily") {
             router.push("/dashboard/stickerFamily")
         }
         else if (key == "signOut") {
@@ -57,6 +60,7 @@ export default function SideBar() {
             signOut()
 
         }
+        console.log("first")
 
     }
     return (
@@ -64,7 +68,7 @@ export default function SideBar() {
 
         <Menu
             onClick={({ key }) => onclick(key)}
-
+            selectedKeys={pathname}
             mode="inline"
             items={items}
             className="h-full w-fit"
