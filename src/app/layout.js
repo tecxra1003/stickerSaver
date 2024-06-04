@@ -6,6 +6,7 @@ import dbConnect from "./lib/mongodb";
 import Navbar from "./components/Navbar";
 import SideBar from "./components/SideBar";
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react"
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -23,7 +24,8 @@ export default async function RootLayout({ children }) {
 
 
         <AuthProvider>
-
+          <SpeedInsights />
+          <Analytics />
           {children}
 
         </AuthProvider>
