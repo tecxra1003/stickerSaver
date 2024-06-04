@@ -40,7 +40,7 @@ export default function Signin() {
         password,
         redirect: false,
       })
-      router.replace("dashboard")
+      // router.replace("dashboard")
       if (res.error) {
 
         setError("invalid credentials")
