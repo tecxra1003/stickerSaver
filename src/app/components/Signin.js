@@ -24,7 +24,6 @@ export default function Signin() {
       const url = `dashboard`
 
       router.replace("dashboard")
-      console.log(session)
 
     }
 

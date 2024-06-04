@@ -78,7 +78,6 @@ export default function CreateFamily({ setIsOpen, setReload, reload, task, id })
 
                 }),
             });
-            console.log(createdFamily)
             if (createdFamily.status == 400) {
                 setLoader(false)
                 setError("Duplicate name not allowed")
