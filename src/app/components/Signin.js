@@ -21,13 +21,13 @@ export default function Signin() {
 
 
 
-      const url = `dashboard`
+
 
       router.replace("dashboard")
 
     }
 
-  });
+  }, [session]);
 
   const handleSubmit = async (e) => {
 
